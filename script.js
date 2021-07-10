@@ -108,10 +108,31 @@ const VoiceRSS = {
     },
   };
   
-function test() {
+// disable/ enable button
+function toggleButton() {
+    // button.disabled = !button.disabled;
+}
+
+// function test() {
+//     VoiceRSS.speech({
+//         key: '94b921e3fce34ab78177fa6216c4f783',
+//         src: 'Poria Jeet',
+//         hl: 'en-us',
+//         v: 'Linda',
+//         r: 0,
+//         c: 'mp3',
+//         f: '44khz_16bit_stereo',
+//         ssml: false
+//     });
+// }
+
+// test();
+
+// passing Joke to VoiceRSS API
+function tellMe(joke) {
     VoiceRSS.speech({
         key: '94b921e3fce34ab78177fa6216c4f783',
-        src: 'Poria Jeet',
+        src: joke,
         hl: 'en-us',
         v: 'Linda',
         r: 0,
@@ -119,6 +140,30 @@ function test() {
         f: '44khz_16bit_stereo',
         ssml: false
     });
+    console.log('Tell ME : ', joke);
 }
 
-test();
+// get Jokes from Joke API
+async function getJokes() {
+    let joke;
+    const api = 'https://v2.jokeapi.dev/joke/Programming,Christmas?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=single';
+    try{
+        // await will wait until response come back.
+        const response = await fetch(api);
+        const data = await response.json();
+        joke = data.joke;
+        // console.log(joke);
+        // Text to Speech
+        tellMe(joke)
+        // Disable Button
+        toggleButton();
+    } catch(error) {
+        // Catch Error
+        console.log('error coming', error)
+    }
+}
+
+// Event Listeners
+
+button.addEventListener('click', getJokes);
+audioELement.addEventListener('ended', toggleButton);
